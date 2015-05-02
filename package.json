@@ -14,8 +14,9 @@
   "keywords": [
     "merge",
     "merging",
-    "coalescse",
-    "coalescse-strategy"
+    "priority",
+    "coalesce",
+    "coalesce-strategy"
   ],
   "author": "Paul Miller <miller874@gmail.com>",
   "license": "MIT",
