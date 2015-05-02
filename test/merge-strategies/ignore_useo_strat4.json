@@ -1,0 +1,16 @@
+{
+  "model" : {
+    "ignore": ["title"],
+    "useOnly": ["rating", "", "artist", "genre", "printNothing"]
+  },
+  "strategies": {
+    "ignore-strat": {
+      "useOnly": ["title", "genre", "id", "rating"],
+      "ignore": ["title"]
+    },
+    "ignore-strat2": {
+      "useOnly": ["printNothing", "revenue", "id", "title"],
+      "ignore": ["studios"]
+    }
+  }
+}

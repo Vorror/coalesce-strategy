@@ -1,0 +1,23 @@
+{
+  "name": "coalesce-strategy",
+  "version": "1.0.0",
+  "description": "A NodeJS module to coalesce various objects into a central object.",
+  "main": "./lib/coalesce-strategy.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Vorror/coalesce-strategy.git"
+  },
+  "keywords": [
+    "merge",
+    "merging",
+    "coalescse"
+  ],
+  "author": "Paul Miller <miller874@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Vorror/coalesce-strategy/issues"
+  }
+}

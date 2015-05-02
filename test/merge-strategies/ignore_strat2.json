@@ -1,0 +1,10 @@
+{
+  "strategies": {
+    "ignore-strat": {
+      "ignore": ["title", "genre"]
+    },
+    "ignore-strat2": {
+      "ignore": ["rating"]
+    }
+  }
+}

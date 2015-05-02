@@ -1,0 +1,39 @@
+{
+  "strategies": {
+    "strat": {
+      "priorities": {
+        "title": 5,
+        "artist": 2,
+        "genre": {
+          "priority" : 5
+        }
+      }
+    },
+    "strat2": {
+      "priorities": {
+        "artist": 7,
+        "revenue": {
+          "priority": 7
+        },
+        "rating": {
+          "priority": 10
+        },
+        "printNothing": {
+          "winOnDefault": false
+        }
+      }
+    },
+    "strat3": {
+      "priorities": {
+        "studios": 10,
+        "rating": {
+          "winOnDefault": true,
+          "priority": 10
+        },
+        "printNothing": {
+          "winOnDefault": false
+        }
+      }
+    }
+  }
+}

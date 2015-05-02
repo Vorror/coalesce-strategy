@@ -1,0 +1,13 @@
+{
+  "model" : {
+    "ignore": ["revenue", "genre"]
+  },
+  "strategies": {
+    "ignore-strat": {
+      "ignore": ["title"]
+    },
+    "ignore-strat2": {
+      "ignore": ["rating"]
+    }
+  }
+}

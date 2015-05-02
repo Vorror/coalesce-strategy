@@ -1,0 +1,12 @@
+{
+  "model" : {
+    "skipKeysWithFunctionValues" : true,
+    "allowMergingOfEmptyValues": false,
+    "ignore": ["title"]
+  },
+  "strategies": {
+    "basic-strat": {
+      "winOnDefault": true
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "model" : {
+  },
+  "strategies": {
+    "basic-strat" : {
+      "priorities": {
+        "title": 2,
+        "revenue": 4,
+        "artist": {
+          "winOnDefault": false,
+          "priority" : 1
+        }
+      }
+    },
+    "basic-strat2" : {
+      "winOnDefault": true,
+      "priorities": {
+        "artist": 1,
+        "genre" : {
+          "priority": 3
+        },
+        "studios" : {
+          "winOnDefault": false
+        }
+      }
+    },
+    "basic-strat3" : {
+      "priorities": {
+        "rating": 5,
+        "studios" : {
+          "winOnDefault": false
+        },
+        "printNothing" : {
+          "priority": 10
+        }
+      }
+    },
+    "basic-strat4" : {
+      "priorities": {
+        "revenue" : {
+          "priority": 10
+        }
+      }
+    },
+    "basic-strat5" : {
+      "baseline": 10,
+      "priorities": {
+        "printNothing" : {
+          "priority": 1
+        }
+      }
+    }
+  }
+}

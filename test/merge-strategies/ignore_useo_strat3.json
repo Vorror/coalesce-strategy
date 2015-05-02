@@ -1,0 +1,13 @@
+{
+  "model" : {
+    "useOnly": ["rating", "revenue", "artist"]
+  },
+  "strategies": {
+    "ignore-strat": {
+      "ignore": ["revenue", "title", "genre"]
+    },
+    "ignore-strat2": {
+      "ignore": ["rating"]
+    }
+  }
+}
