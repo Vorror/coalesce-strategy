@@ -1,3 +1,4 @@
 .travis.yml
+.coveralls.yml
 node_modules
 test
