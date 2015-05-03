@@ -3,17 +3,13 @@
 var chai = require('chai');
 var mocha = require('mocha');
 var assert = chai.assert;
+var _Merger = require('../lib/coalesce-strategy');
 
 describe('Coalesce Strategy', function () {
-
     describe('Test Item creation', function () {
-        before(function(done){
-            var Merger = require('../lib/coalesce-strategy')().createItem();
-            done();
-        });
 
         it('Should create item with random ID', function (done) {
-            var Merger = require('../lib/coalesce-strategy')();
+            var Merger = _Merger();
             var item = Merger.createItem({pizza: 'what'});
             assert.isObject(item, 'should get an object');
             assert.property(item, 'id', 'should have an id');
@@ -23,7 +19,7 @@ describe('Coalesce Strategy', function () {
         });
 
         it('Should have an empty object', function (done) {
-            var Merger = require('../lib/coalesce-strategy')();
+            var Merger = _Merger();
             var item = Merger.createItem({});
             assert.isObject(item, 'should get an object');
             assert.property(item, 'id', 'should have an id');
@@ -34,7 +30,7 @@ describe('Coalesce Strategy', function () {
         });
 
         it('Should have an empty object (noop)', function (done) {
-            var Merger = require('../lib/coalesce-strategy')();
+            var Merger = _Merger();
             var item = Merger.createItem();
             assert.isObject(item, 'should get an object');
             assert.property(item, 'id', 'should have an id');
@@ -45,7 +41,7 @@ describe('Coalesce Strategy', function () {
         });
 
         it('Should create object with an id and result', function (done) {
-            var Merger = require('../lib/coalesce-strategy')();
+            var Merger = _Merger();
             var item = Merger.createItem('What', {ok: 'beep'});
             assert.isObject(item, 'should get an object');
             assert.property(item, 'id', 'should have an id');
@@ -60,93 +56,93 @@ describe('Coalesce Strategy', function () {
     describe('Test isEmpty()', function () {
 
         it('isEmpty() using empty string', function (done) {
-            assert.isTrue(require('../lib/coalesce-strategy').tests.isEmpty(''),
+            assert.isTrue(_Merger.tests.isEmpty(''),
                 'string with no length should be empty');
-            assert.isTrue(require('../lib/coalesce-strategy').tests.isEmpty(String()),
+            assert.isTrue(_Merger.tests.isEmpty(String()),
                 'string with no length should be empty');
             done();
         });
 
         it('isEmpty() using non-empty string', function (done) {
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty('What'),
+            assert.isFalse(_Merger.tests.isEmpty('What'),
                 'string with length should evaluate as false');
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(' '),
+            assert.isFalse(_Merger.tests.isEmpty(' '),
                 'string with length should evaluate as false');
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(String('ok')),
+            assert.isFalse(_Merger.tests.isEmpty(String('ok')),
                 'string with length should evaluate as false');
             done();
         });
 
         it('isEmpty() using empty object', function (done) {
-            assert.isTrue(require('../lib/coalesce-strategy').tests.isEmpty({}),
+            assert.isTrue(_Merger.tests.isEmpty({}),
                 'empty object should evaluate as empty');
             done();
         });
 
         it('isEmpty() using non-empty object', function (done) {
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty({a: 'what'}),
+            assert.isFalse(_Merger.tests.isEmpty({a: 'what'}),
                 'non-empty object should evaluate as false');
             done();
         });
 
         it('isEmpty() using non-empty object, but with \'empty\' property', function (done) {
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty({a: ''}),
+            assert.isFalse(_Merger.tests.isEmpty({a: ''}),
                 'non-empty object should evaluate as false');
             done();
         });
 
         it('isEmpty() using empty array', function (done) {
-            assert.isTrue(require('../lib/coalesce-strategy').tests.isEmpty([]),
+            assert.isTrue(_Merger.tests.isEmpty([]),
                 'empty array should evaluate as empty');
             done();
         });
 
         it('isEmpty() using non-empty array', function (done) {
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(['Hello World', 'Foo']),
+            assert.isFalse(_Merger.tests.isEmpty(['Hello World', 'Foo']),
                 'non-empty array should evaluate as false');
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(new Array('Hello World')),
+            assert.isFalse(_Merger.tests.isEmpty(new Array('Hello World')),
                 'non-empty array should evaluate as false');
             done();
         });
 
         it('isEmpty() using boolean', function (done) {
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(false),
+            assert.isFalse(_Merger.tests.isEmpty(false),
                 'boolean should be false');
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(true),
+            assert.isFalse(_Merger.tests.isEmpty(true),
                 'boolean should be false');
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(Boolean(false)),
+            assert.isFalse(_Merger.tests.isEmpty(Boolean(false)),
                 'boolean should be false');
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(Boolean(true)),
+            assert.isFalse(_Merger.tests.isEmpty(Boolean(true)),
                 'boolean should be false');
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(Boolean()),
+            assert.isFalse(_Merger.tests.isEmpty(Boolean()),
                 'boolean should be false');
             done();
         });
 
         it('isEmpty() using null', function (done) {
-            assert.isTrue(require('../lib/coalesce-strategy').tests.isEmpty(null),
+            assert.isTrue(_Merger.tests.isEmpty(null),
                 'boolean should be false');
             done();
         });
 
         it('isEmpty() using number', function (done) {
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(10),
+            assert.isFalse(_Merger.tests.isEmpty(10),
                 'number should be false');
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(0),
+            assert.isFalse(_Merger.tests.isEmpty(0),
                 'number should be false');
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(-10),
+            assert.isFalse(_Merger.tests.isEmpty(-10),
                 'number should be false');
             done();
         });
 
         it('isEmpty() using undefined', function (done) {
-            assert.isTrue(require('../lib/coalesce-strategy').tests.isEmpty(),
+            assert.isTrue(_Merger.tests.isEmpty(),
                 'undefined should be empty');
             done();
         });
 
         it('isEmpty() using function', function (done) {
-            assert.isFalse(require('../lib/coalesce-strategy').tests.isEmpty(function () {}),
+            assert.isFalse(_Merger.tests.isEmpty(function () {}),
                 'function should be false');
             done();
         });
@@ -155,21 +151,21 @@ describe('Coalesce Strategy', function () {
     describe('Test randomID()', function () {
 
         it('randomId() using noop', function (done) {
-            var id = require('../lib/coalesce-strategy').tests.randomId();
+            var id = _Merger.tests.randomId();
             assert.isString(id, 'should get a string');
             assert.equal(id.length, '15', 'should receive a string of length 15');
             done();
         });
 
         it('randomId() using length', function (done) {
-            var id = require('../lib/coalesce-strategy').tests.randomId(32);
+            var id = _Merger.tests.randomId(32);
             assert.isString(id, 'should get a string');
             assert.equal(id.length, '32', 'should receive a string of length 32');
             done();
         });
 
         it('randomId() using negative length', function (done) {
-            var id = require('../lib/coalesce-strategy').tests.randomId(-20);
+            var id = _Merger.tests.randomId(-20);
             assert.isString(id, 'should get a string');
             assert.equal(id.length, '0', 'should receive a string of length 0');
             done();
@@ -179,54 +175,54 @@ describe('Coalesce Strategy', function () {
     describe('Test hasProperty()', function () {
 
         it('hasProperty() using empty object', function (done) {
-            var val = require('../lib/coalesce-strategy').tests.hasProperty({}, 'foo');
+            var val = _Merger.tests.hasProperty({}, 'foo');
             assert.isFalse(val, 'shouldn\'t return true on an empty object');
             done();
         });
 
         it('hasProperty() using property and flat structure', function (done) {
-            var val = require('../lib/coalesce-strategy').tests.hasProperty({foo:'bar'}, 'foo');
+            var val = _Merger.tests.hasProperty({foo:'bar'}, 'foo');
             assert.isTrue(val, 'Should find foo property');
             done();
         });
 
         it('hasProperty() using property and nested structure', function (done) {
-            var val = require('../lib/coalesce-strategy').tests.hasProperty({foobar:{bar:{foo: 'bar'}}},
+            var val = _Merger.tests.hasProperty({foobar:{bar:{foo: 'bar'}}},
                 'foobar.bar.foo');
             assert.isTrue(val, 'should find foo property');
             done();
         });
 
         it('hasProperty() using property and nested structure(excess dots)', function (done) {
-            var val = require('../lib/coalesce-strategy').tests.hasProperty({foobar:{bar:{foo: 'bar'}}},
+            var val = _Merger.tests.hasProperty({foobar:{bar:{foo: 'bar'}}},
                 'foobar.....bar.....foo');
             assert.isFalse(val, 'shouldn\'t find foo');
             done();
         });
 
         it('hasProperty() using property and nested structure (missing link in chain)', function (done) {
-            var val = require('../lib/coalesce-strategy').tests.hasProperty({foobar:{bar:{foo: 'bar'}}},
+            var val = _Merger.tests.hasProperty({foobar:{bar:{foo: 'bar'}}},
                 'foobar.foo');
             assert.isFalse(val, 'should\ find foo property');
             done();
         });
 
         it('hasProperty() using boolean false property', function (done) {
-            var val = require('../lib/coalesce-strategy').tests.hasProperty({foobar:false},
+            var val = _Merger.tests.hasProperty({foobar:false},
                 'foobar');
             assert.isTrue(val, 'should find a (boolean) false property');
             done();
         });
 
         it('hasProperty() using empty string property', function (done) {
-            var val = require('../lib/coalesce-strategy').tests.hasProperty({foobar:''},
+            var val = _Merger.tests.hasProperty({foobar:''},
                 'foobar');
             assert.isTrue(val, 'should find a empty string');
             done();
         });
 
         it('hasProperty() using incorrect nested search', function (done) {
-            var val = require('../lib/coalesce-strategy').tests.hasProperty({foobar:{bar:{foo: 'bar'}}},
+            var val = _Merger.tests.hasProperty({foobar:{bar:{foo: 'bar'}}},
                 'foo');
             assert.isFalse(val, 'should\'t find foo using incorrect indirection');
             done();
@@ -249,7 +245,7 @@ describe('Coalesce Strategy', function () {
         }
 
         it('Test merging with no strategy or model', function (done) {
-            var merger = require('../lib/coalesce-strategy')();
+            var merger = _Merger();
             var items = [];
             items.push(merger.createItem({
                 title: 'Awesome title 1',
@@ -265,7 +261,7 @@ describe('Coalesce Strategy', function () {
         });
 
         it('Test merging with no strategy', function (done) {
-            var merger = require('../lib/coalesce-strategy')({}, songFactory());
+            var merger = _Merger({}, songFactory());
             var items = [];
             items.push(merger.createItem({
                     title: 'Awesome title 1',
@@ -289,7 +285,7 @@ describe('Coalesce Strategy', function () {
         });
 
         it('Test merging with multiple items and ignored properties', function (done) {
-            var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/ignore_strat.json'),
+            var merger = _Merger(require('./merge-strategies/ignore_strat.json'),
                 songFactory());
             var items = [];
             items.push(merger.createItem({
@@ -332,7 +328,7 @@ describe('Coalesce Strategy', function () {
         });
 
         it('Test merging with multiple items and ignored properties on model and strategies', function (done) {
-            var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/ignore_strat2.json'),
+            var merger = _Merger(require('./merge-strategies/ignore_strat2.json'),
                 songFactory());
             var items = [];
 
@@ -388,7 +384,7 @@ describe('Coalesce Strategy', function () {
         });
 
         it('Test merging with useonly/ignore on model/properties', function (done) {
-            var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/ignore_useo_strat3.json'),
+            var merger = _Merger(require('./merge-strategies/ignore_useo_strat3.json'),
                 songFactory());
             var items = [];
 
@@ -441,7 +437,7 @@ describe('Coalesce Strategy', function () {
         });
 
         it('Test merging with useonly on model and ignores on items', function (done) {
-            var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/ignore_useo_strat4.json'),
+            var merger = _Merger(require('./merge-strategies/ignore_useo_strat4.json'),
                 songFactory());
             var items = [];
 
@@ -498,7 +494,7 @@ describe('Coalesce Strategy', function () {
         });
 
         it('Test merging with some simple priorities', function (done) {
-            var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/basic_strat.json'),
+            var merger = _Merger(require('./merge-strategies/basic_strat.json'),
                 songFactory());
             var items = [];
 
@@ -573,7 +569,7 @@ describe('Coalesce Strategy', function () {
         it('Test merging with some model features and testing winOnDefault', function (done) {
             var song = songFactory();
             song.genre = 'SONG_FACTORY';
-            var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/basic_strat2.json'),
+            var merger = _Merger(require('./merge-strategies/basic_strat2.json'),
                 song);
             var items = [];
 
@@ -618,7 +614,7 @@ describe('Coalesce Strategy', function () {
             song.artist = 'SONG_FACTORY';
             song.revenue = 'SONG_FACTORY';
             song.genre = 'SONG_FACTORY';
-            var merger = require('../lib/coalesce-strategy')({}, song);
+            var merger = _Merger({}, song);
             var items = [];
 
             items.push(merger.createItem('basic-strat', {
@@ -655,7 +651,7 @@ describe('Coalesce Strategy', function () {
                     allowMergingOfEmptyValues: false
                 }
             };
-            var merger = require('../lib/coalesce-strategy')(strat, song);
+            var merger = _Merger(strat, song);
             var items = [];
 
             items.push(merger.createItem('basic-strat', {
@@ -692,7 +688,7 @@ describe('Coalesce Strategy', function () {
                     allowMergingOfEmptyValues: true
                 }
             };
-            var merger = require('../lib/coalesce-strategy')(strat, song);
+            var merger = _Merger(strat, song);
             var items = [];
 
             items.push(merger.createItem('basic-strat', {
@@ -728,7 +724,7 @@ describe('Coalesce Strategy', function () {
         describe('Test commutative merging', function () {
 
             it('Commutative test #1 [123]', function (done) {
-                var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/commutative.json'),
+                var merger = _Merger(require('./merge-strategies/commutative.json'),
                     songFactory());
                 var items = [];
 
@@ -786,7 +782,7 @@ describe('Coalesce Strategy', function () {
             });
 
             it('Commutative test #2 [132]', function (done) {
-                var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/commutative.json'),
+                var merger = _Merger(require('./merge-strategies/commutative.json'),
                     songFactory());
                 var items = [];
 
@@ -844,7 +840,7 @@ describe('Coalesce Strategy', function () {
             });
 
             it('Commutative test #3 [213]', function (done) {
-                var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/commutative.json'),
+                var merger = _Merger(require('./merge-strategies/commutative.json'),
                     songFactory());
                 var items = [];
 
@@ -902,7 +898,7 @@ describe('Coalesce Strategy', function () {
             });
 
             it('Commutative test #4 [231]', function (done) {
-                var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/commutative.json'),
+                var merger = _Merger(require('./merge-strategies/commutative.json'),
                     songFactory());
                 var items = [];
 
@@ -960,7 +956,7 @@ describe('Coalesce Strategy', function () {
             });
 
             it('Commutative test #5 [312]', function (done) {
-                var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/commutative.json'),
+                var merger = _Merger(require('./merge-strategies/commutative.json'),
                     songFactory());
                 var items = [];
 
@@ -1018,7 +1014,7 @@ describe('Coalesce Strategy', function () {
             });
 
             it('Commutative test #6 [321]', function (done) {
-                var merger = require('../lib/coalesce-strategy')(require('./merge-strategies/commutative.json'),
+                var merger = _Merger(require('./merge-strategies/commutative.json'),
                     songFactory());
                 var items = [];
 
@@ -1087,7 +1083,7 @@ describe('Coalesce Strategy', function () {
                     }
                 };
 
-                var merger = require('../lib/coalesce-strategy')(strat, songFactory());
+                var merger = _Merger(strat, songFactory());
                 var items = [];
 
                 items.push(merger.createItem('basic-strat',
@@ -1136,7 +1132,7 @@ describe('Coalesce Strategy', function () {
                     }
                 };
 
-                var merger = require('../lib/coalesce-strategy')(strat, songFactory());
+                var merger = _Merger(strat, songFactory());
                 var items = [];
 
                 items.push(merger.createItem('basic-strat',
