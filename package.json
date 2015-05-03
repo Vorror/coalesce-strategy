@@ -4,8 +4,7 @@
   "description": "A nodejs module to coalesce javascript objects into a central model",
   "main": "./lib/coalesce-strategy.js",
   "scripts": {
-    "test-mocha": "mocha",
-    "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage ./test/*.js"
+    "test": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage ./test/*.js"
   },
   "repository": {
     "type": "git",
