@@ -10,9 +10,9 @@ Coalesce Strategy
 [![MEGANPM][MEGANPM-image]][downloads-url]
 
 
-__coalesce-strategy__ is a nodejs module that allows you to create relatively* complex merging strategies for javascript objects. This module really shines if you're consuming various json objects from various services and you need fine grained control of which json fields you'll add to your database.
+__coalesce-strategy__ is a nodejs module that allows you to create relatively* complex merging strategies for javascript objects. This module really shines if you're consuming various json objects from various services and you need fine grained control over which json fields you'll add to your database.
 
-\* relatively because *coalesce-strategy* doesn't support *deep* priorities i.e flat objects only
+\* relatively because *coalesce-strategy* doesn't support *deep* priorities i.e flat preferred only
 
 ## Install
 ```sh
@@ -27,7 +27,7 @@ And before now you would probably hard code this manually. And this may be ok fo
 
 ## Quick Example
 
-Based on our song meta data example above, here's how we would solve our problem.
+Based on our song meta data example above, here's how we would solve our problem with *coalesce-strategy*
 
 First lets define our strategy file(basic_strat.json):
 
@@ -49,7 +49,7 @@ First lets define our strategy file(basic_strat.json):
 }
 ```
 
-Now for the merging:
+Now for the coalescing:
 
 ```js
 var strategy = require('./basic_strat.json');
