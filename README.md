@@ -10,9 +10,9 @@ Coalesce Strategy
 [![MEGANPM][MEGANPM-image]][downloads-url]
 
 
-__coalesce-strategy__ is a nodejs module that allows you to create relatively* complex merging strategies for javascript objects. This module really shines if you're consuming various json objects from various services and you need fine grained control over which json fields you'll add to your database.
+__coalesce-strategy__ is a nodejs module that allows you to create relatively* complex merging strategies for javascript objects. This module really shines if you're consuming json objects from various services and you need fine grained control over which fields you'll use in your aaplication.
 
-\* relatively because *coalesce-strategy* doesn't support *deep* priorities i.e flat preferred only
+\**coalesce-strategy* doesn't support *deep* priorities i.e flat objects are preferred.
 
 ## Install
 ```sh
@@ -23,11 +23,11 @@ For example, if you created an app that gathered ID3 tag data for songs from var
 
 And before now you would probably hard code this manually. And this may be ok for 2 services, but when you need to *coalesce* objects from 10+ services the code gets unwieldy and unmanageable. Especially in a real life scenario where the items you're merging may be missing fields. e.g if Lastfm was missing genre data, you would probably want to fallback to Spotify.
 
- And that's where *coalesce-strategy* comes into play. It allows you to define a strategy(json object) which has the *strategies* and *priorities* that should be used to coalesce your items.
+ And that's where *coalesce-strategy* comes into play. It allows you to define a strategy object which has the *strategies* and *priorities* that should be used to coalesce your items.
 
 ## Quick Example
 
-Based on our song meta data example above, here's how we would solve our problem with *coalesce-strategy*
+Based on our song meta data example above, here's how we would solve our problem using *coalesce-strategy*
 
 First lets define our strategy file(basic_strat.json):
 
@@ -58,7 +58,8 @@ var strategy = require('./basic_strat.json');
 var songModel = {
     title: '',
     genre: '',
-    releaseDate: ''
+    releaseDate: '',
+    length: ''
 };
 
 var merger = require('coalesce-strategy')(strategy, songModel);
@@ -73,15 +74,21 @@ items.push(merger.createItem('Spotify', {
 items.push(merger.createItem('Lastfm', {
     title: 'The Fo&^$o_Bars!',
     genre: 'dubstep',
-    pizzaFactor: 'supreme' // doesn't exist on model
+    pizzaFactor: 'supreme' // doesn't exist on the model
+}));
+
+// anonymous items have priorities of 0
+items.push(merger.createItem({
+    title: 'Fizzies', // priority == 0; loses to Spotify
+    length: '10 Minutes'
 }));
 
 merger.merge(items, function(err, result) {
-    console.log(result); // => { title: 'The FooBars', genre: 'dubstep', releaseDate: '10-21-2200' }
+    console.log(result); // => { title: 'The FooBars', genre: 'dubstep', releaseDate: '10-21-2200', length: '10 Minutes' }
 });
 ```
 
-By using *coalesce-strategy* we no longer have to hardcode the properties we wish to use and allows us to quickly and easily modify existing priorities, as well as add new strategies when we add additional services. All *without* changing our code existing logic.
+By using *coalesce-strategy* we no longer have to hard code the properties we wish to use and allows us to quickly and easily modify existing priorities, as well as add new strategies when we add additional services. All *without* changing existing code logic.
 
 ## Documentation
 
@@ -104,7 +111,27 @@ By using *coalesce-strategy* we no longer have to hardcode the properties we wis
 
 
 ## License
-MIT
+The MIT License (MIT)
+
+Copyright (c) 2015 Paul J. Miller
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 [MEGANPM-image]: https://nodei.co/npm/coalesce-strategy.png
 
