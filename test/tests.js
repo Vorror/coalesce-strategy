@@ -29,7 +29,7 @@ describe('Coalesce Strategy', function () {
             done();
         });
 
-        it('Should have an empty object', function (done) {
+        it('Should have an empty object (noop)', function (done) {
             var Merger = require('../lib/coalesce-strategy')();
             var item = Merger.createItem();
             assert.isObject(item, 'should get an object');
@@ -49,6 +49,18 @@ describe('Coalesce Strategy', function () {
             assert.equal(item.id, 'What', 'should create an object with correct id');
             assert.isTrue(item.id.length > 0, 'should have an id length');
             assert.deepEqual(item.item, {ok: 'beep'}, 'sesults should contain the exact object');
+            done();
+        });
+
+
+        // ignore testing something with travis ci
+        it('Should create item with random ID', function (done) {
+            var Merger = require('../lib/coalesce-strategy')();
+            var item = Merger.createItem({pizza: 'what'});
+            assert.isObject(item, 'should get an object');
+            assert.property(item, 'id', 'should have an id');
+            assert.property(item, 'item', 'should have an item object');
+            assert.isTrue(item.id.length > 0, 'should have an id length');
             done();
         });
 
