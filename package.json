@@ -1,6 +1,6 @@
 {
   "name": "coalesce-strategy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A NodeJS module to coalesce various objects into a central object.",
   "main": "./lib/coalesce-strategy.js",
   "scripts": {
