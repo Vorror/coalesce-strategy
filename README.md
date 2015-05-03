@@ -34,17 +34,8 @@ First lets define our strategy file(basic_strat.json):
 ```js
 {
   "strategies": {
-    "Spotify" : {
-      "priorities": {
-        "title": 10
-      }
-    },
-    "Lastfm" : {
-      "priorities": {
-        "genre": 3,
-        "releaseDate": 3
-      }
-    }
+    "Spotify" : { "priorities": { "title": 10 } },
+    "Lastfm" : { "priorities": { "genre": 3,  "releaseDate": 3 } }
   }
 }
 ```
@@ -91,10 +82,6 @@ merger.merge(items, function(err, result) {
 By using *coalesce-strategy* we no longer have to hard code the properties we wish to use and allows us to quickly and easily modify existing priorities, as well as add new strategies when we add additional services. All *without* changing existing code logic.
 
 ## Documentation
-
-### Constructor
-* [`function (strategy, model)`](#constructor)
-
 
 ### Methods
 
