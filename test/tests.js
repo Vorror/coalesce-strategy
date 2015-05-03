@@ -7,6 +7,10 @@ var assert = chai.assert;
 describe('Coalesce Strategy', function () {
 
     describe('Test Item creation', function () {
+        before(function(done){
+            var Merger = require('../lib/coalesce-strategy')().createItem();
+            done();
+        });
 
         it('Should create item with random ID', function (done) {
             var Merger = require('../lib/coalesce-strategy')();
@@ -51,19 +55,6 @@ describe('Coalesce Strategy', function () {
             assert.deepEqual(item.item, {ok: 'beep'}, 'sesults should contain the exact object');
             done();
         });
-
-
-        // ignore testing something with travis ci
-        it('Should create item with random ID', function (done) {
-            var Merger = require('../lib/coalesce-strategy')();
-            var item = Merger.createItem({pizza: 'what'});
-            assert.isObject(item, 'should get an object');
-            assert.property(item, 'id', 'should have an id');
-            assert.property(item, 'item', 'should have an item object');
-            assert.isTrue(item.id.length > 0, 'should have an id length');
-            done();
-        });
-
     });
 
     describe('Test isEmpty()', function () {
