@@ -10,7 +10,7 @@ Coalesce Strategy
 [![MEGANPM][MEGANPM-image]][downloads-url]
 
 
-__coalesce-strategy__ is a nodejs module that allows you to create relatively* complex merging strategies for javascript objects. This module really shines if you're consuming json objects from various services and you need fine grained control over which fields you'll use in your aaplication.
+__coalesce-strategy__ is a nodejs module that allows you to create relatively* complex merging strategies for javascript objects. This module really shines if you're consuming json objects from various services and you need fine grained control over which fields you'll use in your application.
 
 \**coalesce-strategy* doesn't support *deep* priorities i.e flat objects are preferred.
 
@@ -96,6 +96,7 @@ By using *coalesce-strategy* we no longer have to hard code the properties we wi
 * [`ignore`](#ignore)
 * [`useOnly`](#useOnly)
 * [`baseline`](#baseline)
+* [`priority`](#priority)
 * [`skipKeysWithFunctionValues`](#skipKeysWithFunctionValues)
 * [`allowMergingOfEmptyValues`](#allowMergingOfEmptyValues)
 
@@ -215,11 +216,11 @@ merger.merge(items, function(err, result) {
 
 Modifiers are a powerful feature of coalesce-strategy that allows intricate customization of the coalescing process. Coalesce-strategy supports blacklisting and whitelisting of properties, as well as a few other customization options.
 
-To understand the modifier documentation below, it's important to understand the various levels/ways a modifier can be set in your strategy file(`model`, `strategy`, `priority`).
+To understand the modifier documentation below, it's important to understand the various levels/ways a modifier can be set inside a strategy file(`model`, `strategy`, `priority`).
 
-Modifiers set on the `strategy` level affects *all* properties on that item.
+Modifiers set on the `strategy` level affects *all* properties on that item(including ones that aren't explicitly defined).
 
-A strategy object inside your strategy file doesn't need to include every property an item may have. Anything you don't explicitly give a priority will be assumed to have a priority of 0.
+A strategy object inside a strategy file *does not* need to include every property an item may have. Anything not given an explicit priority will be assumed to have a priority of 0.
 
 ```js
 // SomeStrategyFile.json
@@ -252,9 +253,9 @@ A strategy object inside your strategy file doesn't need to include every proper
 <a name="winOnDefault" />
 ### winOnDefault
 
-Generally the property with the higher priority always wins, but when two or more properties have the same priority, we refer to this as the "Default" or  "Conflict" state. This modifier allows you decide who should "win" in that scenario. 
+Generally the property with the highest priority always wins, but when two or more properties have the same priority, we refer to this as the "Default" or  "Conflict" state. This modifier allows coalesce-strategy to decide who should "win" in that scenario. 
 
-By default the item who appears later in the array of strategy items wins.
+Without the use of `winOnDefault` the item who appears later in the array of strategy items wins.
 
 __Supported On__
 
@@ -328,7 +329,7 @@ merger.merge(items, function(err, result) {
 <a name="ignore" />
 ### ignore
 
-This is a blacklist of properties. Properties that are blacklisted will be ignored during the coalescing process.
+A blacklist of properties. Properties that are blacklisted will be ignored during the coalescing process.
 
 __Supported On__
 
@@ -377,6 +378,70 @@ items.push(merger.createItem('Amazon', {
 }));
 merger.merge(items, function(err, result) {
     console.log(result); // => { title: 'The Fo&^$o_Bars!', author: '', summary: 'A story about a little byte that could.', rating: '' }
+});
+```
+
+---------------------------------------
+
+<a name="useOnly" />
+### useOnly
+
+A whitelist of properties. Only properties listed in the array will be used to populate the central model.
+
+__Supported On__
+
+`model` `strategy`
+
+__Type__
+
+`array`
+
+__Examples__
+
+```js
+//basic_strat.json
+{
+  "model": {
+    "useOnly": ["studio", "rating", "revenue"]
+  },
+  "strategies": {
+    "IMDB": {
+      "useOnly": ["rating"]
+    },
+    "metacritic": {
+      "useOnly": ["title", "revenue"]
+    }
+  }
+}
+```
+
+```js
+var strategy = require('./basic_strat.json');
+var movieModel = {
+    title: '',
+    studio: '',
+    rating: '',
+    revenue: ''
+};
+var merger = require('coalesce-strategy')(strategy, movieModel);
+var items = [];
+items.push(merger.createItem('IMDB', {
+    title: 'Pizza Party',
+    studio: 'Lions Gate',
+    revenue: '10M',
+    rating: '5.9' // only this property is whitelisted/allowed
+}));
+items.push(merger.createItem('metacritic', {
+    title: 'The Matrix', // whitelisted by strategy; but isn't whitelisted by the model
+    studio: 'WB',
+    revenue: '900M', // whitelisted
+    rating: '5.9'
+}));
+items.push(merger.createItem({ // anonymous item
+    studio: 'RocketJump' // whitelisted
+}));
+merger.merge(items, function(err, result) {
+    console.log(result); // => { title: '', studio: 'RocketJump', rating: '5.9', revenue: '900M' }
 });
 ```
 
