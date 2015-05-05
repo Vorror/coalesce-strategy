@@ -91,9 +91,11 @@ By using *coalesce-strategy* we no longer have to hard code the properties we wi
 
 ### Modifiers
 
+* [Understanding Modifiers & Priorities (Intro)](#understandMod)
 * [`winOnDefault`](#winOnDefault)
 * [`ignore`](#ignore)
 * [`useOnly`](#useOnly)
+* [`baseline`](#baseline)
 * [`skipKeysWithFunctionValues`](#skipKeysWithFunctionValues)
 * [`allowMergingOfEmptyValues`](#allowMergingOfEmptyValues)
 
@@ -149,9 +151,9 @@ Merges/Coalesces an `array` of strategy items into a central model.
 __Arguments__
 
 * `items` - An array of strategy items.
-* `callback(err, result)` - A callback.
+* `callback(err, result)` - A callback which is called when the coalescing is complete. `result` will be the initial model with its property values modified to conform to the desired priorities.
 
-As of writing the `err` parameter is unused and will always be assigned `null`. This is to remain compatible with libraries that require the traditional `callback(err, data)` paradigm.
+As of writing the `err` parameter is unused and will always be assigned `null`. This is to remain compatible with libraries that require the traditional `callback(err, data)` pattern.
 
 __Examples__
 
@@ -176,6 +178,7 @@ var songModel = {
     length: ''
 };
 
+// initialize coalesce strategy library
 var merger = require('coalesce-strategy')(strategy, songModel);
 
 var items = [];
@@ -205,6 +208,118 @@ merger.merge(items, function(err, result) {
 
 ---------------------------------------
 
+## Modifiers
+
+<a name="understandMod" />
+### Understanding Modifiers & Priorities (Intro)
+
+Modifiers are a powerful feature of coalesce-strategy that allows intricate customization of the coalescing process. Coalesce-strategy supports blacklisting and whitelisting of properties, as well as a few other customization options.
+
+To understand the modifier documentation below, it's important to understand the various levels/ways a modifier can be set in your strategy file(`model`, `strategy`, `priority`).
+
+Modifiers set on the `strategy` level affects *all* properties on that item.
+
+A strategy object inside your strategy file doesn't need to include every property an item may have. Anything you don't explicitly give a priority will be assumed to have a priority of 0.
+
+```js
+// SomeStrategyFile.json
+{
+  "model" : {
+    "ignore": ["title"] // set on the "Model" level
+  },
+
+  "strategies": {
+    "Spotify": { // Spotify Strategy
+      "winOnDefault": false, // set on the "Strategy" level
+
+      "priorities": {
+        "title": 10,
+
+        "release-date": { // setting a priority using an object
+          "winOnDefault": true, // set on the "Priority" level
+          "priority": 5
+        },
+
+        "genre": 2
+      }
+    }
+  }
+}   
+```
+
+---------------------------------------
+
+<a name="winOnDefault" />
+### winOnDefault
+
+Generally the property with the higher priority always wins, but when two or more properties have the same priority, we refer to this as the "Default" or  "Conflict" state. This modifier allows you decide who should "win" in that scenario. 
+
+By default the item who appears later in the array of strategy items wins.
+
+__Supported On__
+
+`model` `strategy`
+
+
+__Examples__
+
+```js
+//basic_strat.json
+{
+  "strategies": {
+    "Spotify" : {
+      "priorities": { "title": 10 }
+    },
+    "Lastfm" : {
+      "priorities": {
+        "title": {
+          "winOnDefault": true,
+          "priority": 10
+        },
+        "releaseDate": 3
+      },
+      "rdio" : {
+        "winOnDefault": false,
+        "priorities": {
+          "releaseDate": 3
+        }
+      }
+    }
+  }
+}
+```
+
+```js
+var strategy = require('./basic_strat.json');
+var songModel = {
+    title: '',
+    genre: '',
+    releaseDate: '',
+    length: ''
+};
+
+var merger = require('coalesce-strategy')(strategy, songModel);
+
+var items = [];
+items.push(merger.createItem('Spotify', {
+    title: 'The FooBars', // conflicts with Lastfm but LastFM has winOnDefault true
+    releaseDate: 'Spotify releaseDate'
+}));
+items.push(merger.createItem('Lastfm', {
+    title: 'The Fo&^$o_Bars!', // will beat spotify in conflict(winOnDefault)
+    releaseDate: 'Lastfm releaseDate' // conflicts with Lastfm but rdio has winOnDefault false
+}));
+items.push(merger.createItem('rdio', {
+    title: 'Fizzies',
+    releaseDate: 'rdio releaseDate' // has winOnDefault false
+}));
+
+merger.merge(items, function(err, result) {
+    console.log(result); // => { title: 'The Fo&^$o_Bars!', genre: '', releaseDate: 'Lastfm releaseDate', length: '' }
+});
+```
+
+---------------------------------------
 
 ## License
 The MIT License (MIT)
