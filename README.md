@@ -539,6 +539,53 @@ __Examples__
 
 ---------------------------------------
 
+<a name="skipKeysWithFunctionValues" />
+### skipKeysWithFunctionValues
+
+Any property/key on the central model object that has assigned a `function` will be ignored during the coalescing process.
+
+__Supported On__
+
+`model`
+
+__Type__
+
+`boolean`
+
+__Examples__
+
+```js
+//basic_strat.json
+{
+  "model": {
+    "skipKeysWithFunctionValues": true
+  },
+  "strategies": {
+    "npm": {
+      "priorities": { "maintainer": 5 } } }
+}
+```
+
+```js
+var strategy = require('./basic_strat.json');
+var npmModel = {
+    packageName: '',
+    calculateDownloads: function() {
+        console.log('Some function');
+    }
+};
+var merger = require('coalesce-strategy')(strategy, npmModel);
+var items = [];
+items.push(merger.createItem('npm', {
+    packageName: 'coalesce-strategy',
+    calculateDownloads: 'Hello World' // ignored because typeof calculateDownloads === function on npmModel
+}));
+merger.merge(items, function(err, result) {
+    console.log(result); // => { packageName: 'coalesce-strategy', calculateDownloads: [Function] }
+});
+```
+
+---------------------------------------
 
 ## License
 The MIT License (MIT)
