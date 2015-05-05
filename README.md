@@ -35,14 +35,14 @@ First lets define our strategy file(basic_strat.json):
 {
   "strategies": {
     "Spotify" : { "priorities": { "title": 10 } },
-    "Lastfm" : { "priorities": { "genre": 3,  "releaseDate": 3 } }
-  }
-}
+    "Lastfm" : { "priorities": { "genre": 3,  "releaseDate": 3 } } }
+}    
 ```
 
 Now for the coalescing:
 
 ```js
+// load our strategy
 var strategy = require('./basic_strat.json');
 
 // define our central model to coalesce against
@@ -70,12 +70,13 @@ items.push(merger.createItem('Lastfm', {
 
 // anonymous items have priorities of 0
 items.push(merger.createItem({
-    title: 'Fizzies', // priority == 0; loses to Spotify
-    length: '10 Minutes'
+    title: 'Fizzies',    // priority == 0; loses to Spotify
+    length: '10 Minutes' // priority == 0;
 }));
 
+// coalesce our items
 merger.merge(items, function(err, result) {
-    console.log(result); // => { title: 'The FooBars', genre: 'dubstep', releaseDate: '10-21-2200', length: '10 Minutes' }
+    console.log(result);     // => { title: 'The FooBars', genre: 'dubstep', releaseDate: '10-21-2200', length: '10 Minutes' }
 });
 ```
 
@@ -85,8 +86,8 @@ By using *coalesce-strategy* we no longer have to hard code the properties we wi
 
 ### Methods
 
-* [`createItem (items, callback)`](#createItem)
-* [`merge ([id] , item)`](#merge)
+* [`createItem ([id] , item)`](#createItem)
+* [`merge (items, callback)`](#merge)
 
 ### Modifiers
 
@@ -95,6 +96,114 @@ By using *coalesce-strategy* we no longer have to hard code the properties we wi
 * [`useOnly`](#useOnly)
 * [`skipKeysWithFunctionValues`](#skipKeysWithFunctionValues)
 * [`allowMergingOfEmptyValues`](#allowMergingOfEmptyValues)
+
+## Methods
+
+<a name="createItem" />
+### createItem ([id] , item)
+
+Wraps `item` into an object with the specified a `id` which can be understood by the library. 
+
+The `id` should match an existing *id* in the strategy object. Items without an `id` will be assigned a randomly generated `id` and all properties will be treated as having an priority of 0.
+
+__Arguments__
+
+* `id` - The id of the strategy.
+* `item` - The data/payload.
+
+__Returns__
+
+* `{object}` - a strategy item.
+
+__Examples__
+
+```js
+// strategy.json
+{
+  "strategies": {
+    "Spotify" : { "priorities": { "title": 10 } } }
+}
+```
+
+```js
+// Anonymous item
+var item1 = merger.createItem({
+    title: 'Fizzies',
+    length: '10 Minutes'
+});
+
+// Item with an id
+var item2 = merger.createItem('Spotify', { // <-- matches id in strategy.json
+    title: 'The FooBars',
+    genre: 'country'
+});
+```
+
+---------------------------------------
+
+<a name="merge" />
+### merge (items, callback)
+
+Merges/Coalesces an `array` of strategy items into a central model.
+
+__Arguments__
+
+* `items` - An array of strategy items.
+* `callback(err, result)` - A callback.
+
+As of writing the `err` parameter is unused and will always be assigned `null`. This is to remain compatible with libraries that require the traditional `callback(err, data)` paradigm.
+
+__Examples__
+
+```js
+// basic_strat.json
+{
+  "strategies": {
+    "Spotify" : { "priorities": { "title": 10 } },
+    "Lastfm" : { "priorities": { "genre": 3,  "releaseDate": 3 } } }
+}    
+```
+
+```js
+// load our strategy
+var strategy = require('./basic_strat.json');
+
+// define our central model to coalesce against
+var songModel = {
+    title: '',
+    genre: '',
+    releaseDate: '',
+    length: ''
+};
+
+var merger = require('coalesce-strategy')(strategy, songModel);
+
+var items = [];
+items.push(merger.createItem('Spotify', {
+    title: 'The FooBars',
+    genre: 'country-horror', // ;)
+    releaseDate: '10-21-2200' // LastFM has a higher priority,
+                              // but it doesn't exist on LastFM's item
+}));
+items.push(merger.createItem('Lastfm', {
+    title: 'The Fo&^$o_Bars!',
+    genre: 'dubstep',
+    pizzaFactor: 'supreme' // doesn't exist on the model
+}));
+
+// anonymous items have priorities of 0
+items.push(merger.createItem({
+    title: 'Fizzies',    // priority == 0; loses to Spotify
+    length: '10 Minutes' // priority == 0;
+}));
+
+// coalesce our items
+merger.merge(items, function(err, result) {
+    console.log(result);     // => { title: 'The FooBars', genre: 'dubstep', releaseDate: '10-21-2200', length: '10 Minutes' }
+});
+```
+
+---------------------------------------
 
 
 ## License
@@ -121,7 +230,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 [MEGANPM-image]: https://nodei.co/npm/coalesce-strategy.png
-
 [npm-image]: https://img.shields.io/npm/v/coalesce-strategy.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/coalesce-strategy
 [travis-image]: https://img.shields.io/travis/Vorror/coalesce-strategy.svg?style=flat-square
