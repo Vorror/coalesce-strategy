@@ -265,7 +265,6 @@ __Type__
 
 `boolean`
 
-
 __Examples__
 
 ```js
@@ -435,13 +434,72 @@ items.push(merger.createItem('metacritic', {
     title: 'The Matrix', // whitelisted by strategy; but isn't whitelisted by the model
     studio: 'WB',
     revenue: '900M', // whitelisted
-    rating: '5.9'
+    rating: '1.0'
 }));
 items.push(merger.createItem({ // anonymous item
     studio: 'RocketJump' // whitelisted
 }));
 merger.merge(items, function(err, result) {
     console.log(result); // => { title: '', studio: 'RocketJump', rating: '5.9', revenue: '900M' }
+});
+```
+
+---------------------------------------
+
+<a name="baseline" />
+### baseline
+
+Shifts the priorities of all the properties on an strategy. This also applies to properties that are not explicitly defined in the strategy file. The property's final priority will be the sum of the baseline and the property's own priority(if defined).
+
+__Supported On__
+
+`strategy`
+
+__Type__
+
+`number`
+
+__Examples__
+
+```js
+//basic_strat.json
+{
+  "strategies": {
+    "npm": {
+      "baseline": 10,
+      "priorities": {
+        "maintainer": 5
+      }
+    },
+    "enterprise":{
+      "priorities": {
+        "maintainer": 8,
+        "packageName": 6
+      }
+    }
+  }
+}
+```
+
+```js
+var strategy = require('./basic_strat.json');
+var npmModel = {
+    packageName: '',
+    maintainer: ''
+};
+var merger = require('coalesce-strategy')(strategy, npmModel);
+var items = [];
+items.push(merger.createItem('npm', {
+    // notice how packageName wasn't given an explicit priority
+    packageName: 'coalesce-strategy', // Baseline shift; priority == 10
+    maintainer: 'vorror' // priority == 15(10+5)
+}));
+items.push(merger.createItem('enterprise', {
+    packageName: 'fake package', // priority == 6
+    maintainer: 'other_guy' // priority == 8
+}));
+merger.merge(items, function(err, result) {
+    console.log(result); // => { packageName: 'coalesce-strategy', maintainer: 'vorror' }
 });
 ```
 
