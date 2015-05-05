@@ -542,7 +542,7 @@ __Examples__
 <a name="skipKeysWithFunctionValues" />
 ### skipKeysWithFunctionValues
 
-Any property/key on the central model object that has assigned a `function` will be ignored during the coalescing process.
+Any property/key on the central model object that has been assigned a `function` will be ignored during the coalescing process.
 
 __Supported On__
 
