@@ -258,7 +258,7 @@ By default the item who appears later in the array of strategy items wins.
 
 __Supported On__
 
-`model` `strategy`
+`strategy` `priority`
 
 
 __Examples__
