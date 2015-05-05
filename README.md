@@ -260,6 +260,10 @@ __Supported On__
 
 `strategy` `priority`
 
+__Type__
+
+`boolean`
+
 
 __Examples__
 
@@ -330,6 +334,9 @@ __Supported On__
 
 `model` `strategy`
 
+__Type__
+
+`array`
 
 __Examples__
 
@@ -374,8 +381,6 @@ merger.merge(items, function(err, result) {
 ```
 
 ---------------------------------------
-
-
 
 ## License
 The MIT License (MIT)
