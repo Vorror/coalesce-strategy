@@ -587,6 +587,65 @@ merger.merge(items, function(err, result) {
 
 ---------------------------------------
 
+<a name="allowMergingOfEmptyValues" />
+### allowMergingOfEmptyValues
+
+Optionally disable coalescing properties with `empty` values.
+Default is `true`.
+
+__Supported On__
+
+`model`
+
+__Type__
+
+`boolean`
+
+__Examples__
+
+```js
+//basic_strat.json
+{
+  "model": { "allowMergingOfEmptyValues": false }
+}
+```
+
+```js
+var strategy = require('./basic_strat.json');
+var npmModel = {
+    packageName: 'coalesce-strategy'
+};
+var merger = require('coalesce-strategy')(strategy, npmModel);
+var items = [];
+items.push(merger.createItem('npm', {
+    packageName: '' // empty so it will be ignored
+}));
+merger.merge(items, function(err, result) {
+    console.log(result); // => { packageName: 'coalesce-strategy' }
+});
+```
+
+And just so there's no confusion as to what qualifies as `empty`:
+
+```js
+var merger = require('coalesce-strategy');
+console.log(merger.tests.isEmpty('')); // => true
+console.log(merger.tests.isEmpty(String())); // => true
+console.log(merger.tests.isEmpty([])); // => true
+console.log(merger.tests.isEmpty({})); // => true
+console.log(merger.tests.isEmpty(null)); // => true
+console.log(merger.tests.isEmpty(undefined)); // => true
+console.log(merger.tests.isEmpty({a: ''})); // => false
+console.log(merger.tests.isEmpty('Stuff')); // => false
+console.log(merger.tests.isEmpty(function(){})); // => false
+console.log(merger.tests.isEmpty(false)); // => false
+console.log(merger.tests.isEmpty(true)); // => false
+console.log(merger.tests.isEmpty(10)); // => false
+```
+Never **EVER** use anything under *`tests`*. It's only exposed for unit testing purposes. You have been warned.
+
+---------------------------------------
+
 ## License
 The MIT License (MIT)
 
