@@ -311,7 +311,7 @@ items.push(merger.createItem('Spotify', {
 }));
 items.push(merger.createItem('Lastfm', {
     title: 'The Fo&^$o_Bars!', // will beat spotify in conflict(winOnDefault)
-    releaseDate: 'Lastfm releaseDate' // conflicts with Lastfm but rdio has winOnDefault false
+    releaseDate: 'Lastfm releaseDate' // conflicts with rdio but rdio has winOnDefault false
 }));
 items.push(merger.createItem('rdio', {
     title: 'Fizzies',
