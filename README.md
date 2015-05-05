@@ -505,6 +505,41 @@ merger.merge(items, function(err, result) {
 
 ---------------------------------------
 
+<a name="priority" />
+### priority
+
+Sets the priority of a particular property. Useful when combining multiple modifiers at the `priority` level.
+
+__Supported On__
+
+`priority`
+
+__Type__
+
+`number`
+
+__Examples__
+
+```js
+//basic_strat.json
+{
+  "strategies": {
+    "npm": {
+      "priorities": {
+        "maintainer": 5,
+        "downloads": {
+        	"priority": 10,
+        	"winOnDefault": true
+        }
+      }
+    }
+  }
+}
+```
+
+---------------------------------------
+
+
 ## License
 The MIT License (MIT)
 
