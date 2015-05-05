@@ -321,6 +321,62 @@ merger.merge(items, function(err, result) {
 
 ---------------------------------------
 
+<a name="ignore" />
+### ignore
+
+This is a blacklist of properties. Properties that are blacklisted will be ignored during the coalescing process.
+
+__Supported On__
+
+`model` `strategy`
+
+
+__Examples__
+
+```js
+//basic_strat.json
+{
+  "model": {
+    "ignore": ["author"]
+  },
+  "strategies": {
+    "BarnesNobles": {},
+    "Amazon": {
+      "ignore": ["summary"]
+    }
+  }
+}
+```
+
+```js
+var strategy = require('./basic_strat.json');
+var bookModel = {
+    title: '',
+    author: '',
+    summary: '',
+    rating: ''
+};
+var merger = require('coalesce-strategy')(strategy, bookModel);
+var items = [];
+items.push(merger.createItem('BarnesNobles', {
+    title: 'Stack Underflow', // priority == 0
+    author: 'Manny', // ignored on model
+    summary: 'A story about a little byte that could.'
+}));
+items.push(merger.createItem('Amazon', {
+    title: 'The Fo&^$o_Bars!', // priority == 0; but is later in the array
+    author: 'Pacquiao', // ignored on model
+    summary: 'Fake summary' // ignored on strategy
+}));
+merger.merge(items, function(err, result) {
+    console.log(result); // => { title: 'The Fo&^$o_Bars!', author: '', summary: 'A story about a little byte that could.', rating: '' }
+});
+```
+
+---------------------------------------
+
+
+
 ## License
 The MIT License (MIT)
 
