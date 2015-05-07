@@ -32,10 +32,11 @@ Based on our song meta data example above, here's how we would solve our problem
 First lets define our strategy file(basic_strat.json):
 
 ```js
+// basic_strat.json
 {
   "strategies": {
     "Spotify" : { "priorities": { "title": 10 } },
-    "Lastfm" : { "priorities": { "genre": 3,  "releaseDate": 3 } } }
+    "Lastfm" : { "priorities": { "genre": 3, "releaseDate": 3 } } }
 }    
 ```
 
@@ -53,6 +54,7 @@ var songModel = {
     length: ''
 };
 
+// initialize coalesce strategy library 
 var merger = require('coalesce-strategy')(strategy, songModel);
 
 var items = [];
@@ -86,7 +88,7 @@ By using *coalesce-strategy* we no longer have to hard code the properties we wi
 
 ### Methods
 
-* [`createItem ([id] , item)`](#createItem)
+* [`createItem ([id], item)`](#createItem)
 * [`merge (items, callback)`](#merge)
 
 ### Modifiers
@@ -103,7 +105,7 @@ By using *coalesce-strategy* we no longer have to hard code the properties we wi
 ## Methods
 
 <a name="createItem" />
-### createItem ([id] , item)
+### createItem ([id], item)
 
 Wraps `item` into an object with the specified a `id` which can be understood by the library. 
 
@@ -268,7 +270,7 @@ __Type__
 __Examples__
 
 ```js
-//basic_strat.json
+// basic_strat.json
 {
   "strategies": {
     "Spotify" : {
@@ -302,6 +304,7 @@ var songModel = {
     length: ''
 };
 
+// initialize coalesce strategy library 
 var merger = require('coalesce-strategy')(strategy, songModel);
 
 var items = [];
@@ -341,7 +344,7 @@ __Type__
 __Examples__
 
 ```js
-//basic_strat.json
+// basic_strat.json
 {
   "model": {
     "ignore": ["author"]
@@ -398,7 +401,7 @@ __Type__
 __Examples__
 
 ```js
-//basic_strat.json
+// basic_strat.json
 {
   "model": {
     "useOnly": ["studio", "rating", "revenue"]
@@ -462,7 +465,7 @@ __Type__
 __Examples__
 
 ```js
-//basic_strat.json
+// basic_strat.json
 {
   "strategies": {
     "npm": {
@@ -521,7 +524,7 @@ __Type__
 __Examples__
 
 ```js
-//basic_strat.json
+// basic_strat.json
 {
   "strategies": {
     "npm": {
@@ -555,7 +558,7 @@ __Type__
 __Examples__
 
 ```js
-//basic_strat.json
+// basic_strat.json
 {
   "model": {
     "skipKeysWithFunctionValues": true
@@ -604,7 +607,7 @@ __Type__
 __Examples__
 
 ```js
-//basic_strat.json
+// basic_strat.json
 {
   "model": { "allowMergingOfEmptyValues": false }
 }
